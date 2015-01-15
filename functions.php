@@ -325,6 +325,54 @@ function displayData()
 }
 
 
+function forgotPass($mail)
+{
+    $mail = strip_tags(mysql_real_escape_string($mail));
+
+
+    $subject = "Forgot Password";
+    $header = "Book Rentage";
+
+    $to = "meshileyaseun@gmail.com";
+
+    $body = "";
+
+    $db = new dbHandler(configFile::hostname, configFile::username, configFile::password);
+    $db ->selectDatabase(configFile::database);
+    $query = "select `email` from `table` where `email` = '$mail'";
+
+    $confirmMail ="";
+
+    $result = mysql_query($query);
+
+    while ($fetch = mysql_fetch_array($result))
+    {
+
+           $confirmMail = $fetch['email'];
+    }
+
+    if($confirmMail === $mail)
+    {
+        mail($to, $subject, $body, $header);
+
+        $_SESSION['success'] = "We will contact you as soon as possible";
+
+    }
+
+
+    else
+    {
+        $_SESSION['error'] = "Sorry, you are not yet registered";
+
+    }
+
+
+
+
+
+}
+
+
 
 function displayerror()
 {
